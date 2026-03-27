@@ -20,10 +20,22 @@ app.get('/', (c) => {
 	return c.text(`Hello World! \n${env.HELLO_MSG}`);
 });
 app.get('/ai', async (c) => {
+	const query = c.req.query('q');
+
+	if (!query) {
+		return c.text('Ask me any "one-word" question. \nExample: /ai?q=what is the capital of India');
+	}
+
 	const result = await c.env.AI.run('@cf/meta/llama-3.1-8b-instruct' as any, {
-		prompt: 'What is the capital of France?'
+		prompt: `Answer the following question. 
+		Guidelines:
+		1. If the answer is a simple factual name (even if it is multiple words like "New Delhi" or "Elon Musk"), provide ONLY that name.
+		2. Do NOT provide sentences, punctuation, or any extra text. 
+		3. If the question requires a long explanation and cannot be answered with a short name, respond exactly with: "I can only answer one-word questions."
+		
+		Question: ${query}`,
 	});
-	return c.json(result);
+	return c.text(result.response);
 });
 
 export default app;
