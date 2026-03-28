@@ -5,7 +5,7 @@ This project is a experimental sandbox for exploring **Cloudflare Workers**, **H
 ## 🚀 Purpose
 A demo application designed to sample key Cloudflare features, including:
 - **Worker Scripting**: Building serverless functions with TypeScript and the Hono framework.
-- **Environment Variables**: Confuguring simple string values (`vars`) for your environment.
+- **Environment Variables**: Configuring simple string values (`vars`) for your environment.
 - **Service Bindings**: Using the **Cloudflare Workers AI** binding to run machine learning models directly in the Worker.
 - **Custom Domains**: Managing routing patterns and custom subdomains (e.g., `orbit.yuvvolabs.com`).
 - **Developer Workflow**: Using Wrangler for local development, type generation, and deployment.
@@ -23,6 +23,24 @@ Regenerate TypeScript types whenever you change `wrangler.jsonc` (to sync your `
 ```bash
 npm run cf-typegen
 ```
+
+### Secrets
+Sensitive values (`USERNAME`, `PASSWORD`, `COOKIE_SECRET`) are never stored in `wrangler.jsonc`.
+
+**Production** — set each secret via Wrangler (prompts for the value):
+```bash
+npx wrangler secret put USERNAME
+npx wrangler secret put PASSWORD
+npx wrangler secret put COOKIE_SECRET
+```
+
+**Local development** — create a `.dev.vars` file in the project root (already gitignored):
+```
+USERNAME=admin
+PASSWORD=your-local-password
+COOKIE_SECRET=any-random-string
+```
+Wrangler picks this up automatically when running `npm run dev`.
 
 ### Deployment
 Deploy the Worker to Cloudflare:

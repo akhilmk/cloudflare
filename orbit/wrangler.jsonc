@@ -26,14 +26,20 @@
 	 * https://developers.cloudflare.com/workers/runtime-apis/bindings/
 	 */
 	/**
-	 * Environment Variables
-	 * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
-	 * Note: Use secrets to store sensitive data.
+	 * Secrets — DO NOT put credentials in "vars" (they are stored in plain text and
+	 * appear in the Cloudflare dashboard). Use Wrangler secrets instead:
+	 *
+	 *   wrangler secret put USERNAME
+	 *   wrangler secret put PASSWORD
+	 *   wrangler secret put COOKIE_SECRET
+	 *
+	 * For local development, create a ".dev.vars" file (gitignored) with:
+	 *   USERNAME=admin
+	 *   PASSWORD=your-local-password
+	 *   COOKIE_SECRET=a-random-32-char-secret
+	 *
 	 * https://developers.cloudflare.com/workers/configuration/secrets/
 	 */
-	"vars": {
-		"HELLO_MSG": "This is a message from env"
-	},
 	"ai": {
 		"binding": "AI"
 	},
