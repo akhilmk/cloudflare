@@ -142,7 +142,7 @@ const TEMPLATES = {
 					<label for="password" style="display: block; margin-bottom: 8px; font-weight: bold; font-size: 0.8rem; text-transform: uppercase;">Pass</label>
 					<input id="password" type="password" name="password" autocomplete="current-password" style="width: 100%; padding: 12px; border: 1px solid #000; box-sizing: border-box; font-family: monospace;" placeholder="••••••••" required />
 				</div>
-				<button type="submit" style="background: #000; color: #fff; border: none; padding: 15px; cursor: pointer; font-size: 0.9rem; font-weight: bold; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px;">Initialize &rarr;</button>
+				<button type="submit" style="background: #000; color: #fff; border: none; padding: 15px; cursor: pointer; font-size: 0.9rem; font-weight: bold; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px;">Login</button>
 			</form>
 		</div>
 	</div>
