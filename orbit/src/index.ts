@@ -66,34 +66,27 @@ app.post('/', async (c) => {
 	return c.html(TEMPLATES.HOME('Invalid credentials. Please try again.'), 401);
 });
 
-// Admin Console — protected by pageAuth
-app.get('/admin', pageAuth, async (c) => {
-	const raw = c.req.query('q');
-	// Sanitize to a single word — prevents multi-word prompt inflation
-	const q = raw ? raw.trim().split(/\s+/)[0]!.slice(0, 40) : '';
-	let answer = '';
-
-	if (q) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const result = await (c.env.AI.run as any)('@cf/meta/llama-3.1-8b-instruct', {
-			prompt: `Tell a short funny joke about "${q}". Under 100 words. Just the joke.`,
-			max_tokens: 100,
-		});
-		answer = (result as { response?: string }).response ?? '';
-	}
-	return c.html(TEMPLATES.ADMIN(answer, q));
+// Admin Console — now just the static shell
+app.get('/admin', pageAuth, (c) => {
+	return c.html(TEMPLATES.ADMIN());
 });
 
-// AI JSON endpoint — protected by apiAuth
+// AI JSON endpoint — the engine behind the Joke Engine
 app.get('/ai', apiAuth, async (c) => {
-	const q = c.req.query('q');
-	if (!q) return c.json({ error: 'Missing query parameter: q' }, 400);
+	const raw = c.req.query('q');
+	if (!raw) return c.json({ error: 'Missing word' }, 400);
+
+	// Sanitize to a single word
+	const q = raw.trim().split(/\s+/)[0]!.slice(0, 40);
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const result = await (c.env.AI.run as any)('@cf/meta/llama-3.1-8b-instruct', {
-		prompt: `Answer in one word. Question: ${q}`,
+		prompt: `Tell a short funny joke about "${q}". Under 100 words. Just the joke.`,
+		max_tokens: 100,
 	});
-	return c.json({ answer: (result as { response?: string }).response ?? '' });
+
+	const answer = (result as { response?: string }).response ?? 'No joke found.';
+	return c.json({ q, answer });
 });
 
 app.get('/logout', (c) => {
@@ -109,10 +102,18 @@ function htmlShell(title: string, body: string): string {
 	return `<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex, nofollow" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline'; script-src 'none';" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline';" />
+  <style>
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid #333;
+      border-top: 2px solid #fff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+  </style>
   <title>${escapeHtml(title)}</title>
 </head>
 <body style="margin:0;background:#fff;">
@@ -148,7 +149,7 @@ const TEMPLATES = {
 `,
 		),
 
-	ADMIN: (answer?: string, query?: string) =>
+	ADMIN: () =>
 		htmlShell(
 			'Orbit — Console',
 			`
@@ -158,24 +159,63 @@ const TEMPLATES = {
 			<a href="/logout" style="color: #000; text-decoration: none; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; padding: 5px 10px; border: 1px solid #000;">Sign Out</a>
 		</div>
 		<div style="background: #fff; padding: 30px; border: 1px solid #eee;">
-			<form action="/admin" method="GET" style="display: flex; flex-direction: column; gap: 12px;">
+			<form id="joke-form" style="display: flex; flex-direction: column; gap: 12px;">
 				<label for="q" style="font-size: 0.9rem; font-weight: bold; color: #333;">Drop a word. Get a joke.</label>
 				<div style="display: flex; gap: 10px;">
-					<input id="q" type="text" name="q" value="${escapeHtml(query ?? '')}" placeholder="e.g. banana" style="flex-grow: 1; padding: 12px; border: 1px solid #000; font-family: monospace;" required />
-					<button type="submit" style="background: #000; color: #fff; border: none; padding: 0 25px; cursor: pointer; font-weight: bold; text-transform: uppercase;">Get a Joke</button>
+					<input id="q" type="text" name="q" placeholder="e.g. banana" style="flex-grow: 1; padding: 12px; border: 1px solid #000; font-family: monospace;" required />
+					<button type="submit" id="submit-btn" style="background: #000; color: #fff; border: none; padding: 0 25px; cursor: pointer; font-weight: bold; text-transform: uppercase;">Get a Joke</button>
 				</div>
 			</form>
-			${answer
-				? `
-			<div role="region" aria-label="Joke" style="margin-top: 40px; padding: 30px; background: #000; color: #fff; position: relative;">
-				<div style="position: absolute; top: 10px; right: 15px; font-size: 0.6rem; color: #444; font-family: monospace;">😄 JOKE LOADED</div>
-				<strong style="display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; color: #666;">About: ${escapeHtml(query ?? '')}</strong>
-				<p style="font-size: 1.1rem; font-family: monospace; line-height: 1.7; overflow-wrap: break-word; margin: 0;">${escapeHtml(answer)}</p>
-			</div>`
-				: ''
-			}
+			<div id="result-area" style="display: none; margin-top: 40px; padding: 30px; background: #000; color: #fff; position: relative;">
+				<div id="status-tag" style="position: absolute; top: 10px; right: 15px; font-size: 0.6rem; color: #444; font-family: monospace;">😄 JOKE LOADED</div>
+				<div id="spinner" class="spinner" style="position: absolute; top: 10px; right: 100px; display: none;"></div>
+				<strong id="about-tag" style="display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; color: #666;">About: banana</strong>
+				<p id="joke-text" style="font-size: 1.1rem; font-family: monospace; line-height: 1.7; overflow-wrap: break-word; margin: 0;"></p>
+			</div>
 		</div>
 	</div>
+	<script>
+		const form = document.getElementById('joke-form');
+		const resultArea = document.getElementById('result-area');
+		const jokeText = document.getElementById('joke-text');
+		const aboutTag = document.getElementById('about-tag');
+		const submitBtn = document.getElementById('submit-btn');
+		const statusTag = document.getElementById('status-tag');
+		const spinner = document.getElementById('spinner');
+
+		form.onsubmit = async (e) => {
+			e.preventDefault();
+			const q = document.getElementById('q').value;
+			
+			// Loading state
+			submitBtn.disabled = true;
+			submitBtn.innerText = 'Consulting...';
+			resultArea.style.display = 'block';
+			resultArea.style.opacity = '0.5';
+			statusTag.innerText = '⚡ GENERATING';
+			spinner.style.display = 'inline-block';
+			jokeText.innerText = 'Crunching reality into a joke...';
+			
+			try {
+				const res = await fetch(\`/ai?q=\${encodeURIComponent(q)}\`);
+				const data = await res.json();
+				
+				if (data.error) throw new Error(data.error);
+				
+				jokeText.innerText = data.answer;
+				aboutTag.innerText = 'About: ' + data.q;
+				statusTag.innerText = '😄 JOKE LOADED';
+				resultArea.style.opacity = '1';
+			} catch (err) {
+				jokeText.innerText = 'Error: ' + err.message;
+				statusTag.innerText = '❌ FAILED';
+			} finally {
+				submitBtn.disabled = false;
+				submitBtn.innerText = 'Get a Joke';
+				spinner.style.display = 'none';
+			}
+		};
+	</script>
 `,
 		),
 };
