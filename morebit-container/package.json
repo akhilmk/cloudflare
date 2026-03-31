@@ -1,5 +1,5 @@
 {
-	"name": "containers-template",
+	"name": "morebit",
 	"description": "Build a Container-enabled Worker",
 	"cloudflare": {
 		"label": "Containers Starter",

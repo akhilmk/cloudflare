@@ -4,7 +4,7 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "autumn-snow-fde4",
+	"name": "morebit",
 	"main": "src/index.ts",
 	"compatibility_date": "2025-10-08",
 	"compatibility_flags": [
