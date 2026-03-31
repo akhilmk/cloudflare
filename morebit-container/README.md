@@ -38,6 +38,13 @@ Then run the development server (using the package manager of your choice):
 npm run dev
 ```
 
+### WSL2 Users
+If you are running this on WSL2, you may see an error like `Cannot assign requested address; toString() = 172.17.0.1:0`. To fix this, you must manually bridge the Docker IP address by running:
+
+```bash
+sudo ip addr add 172.17.0.1/32 dev lo
+```
+
 Open [http://localhost:8787](http://localhost:8787) with your browser to see the result.
 
 You can start editing your Worker by modifying `src/index.ts` and you can start
