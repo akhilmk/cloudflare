@@ -12,49 +12,43 @@ It demonstrates basic Container configuration, launching and routing to individu
 
 <!-- dash-content-end -->
 
-Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
+## Architecture: Nano-Services with Cloudflare Containers
 
-```bash
-npm create cloudflare@latest -- --template=cloudflare/templates/containers-template
-```
+This project demonstrates a multi-service "Nano-Service" pattern using Cloudflare Workers and Containers. It is split into two distinct container classes to handle different workload requirements.
 
-## Getting Started
+### 1. Service Breakdown
 
-First, run:
+| Container Class | Role | Image | Scaling Pattern |
+| :--- | :--- | :--- | :--- |
+| **`apicontainer`** | Main API Entry | `api.Dockerfile` | Service-scoped Singleton |
+| **`processcontainer`** | Background Workers | `process.Dockerfile` | ID-scoped (On-demand) |
 
-```bash
-npm install
-# or
-yarn install
-# or
-pnpm install
-# or
-bun install
-```
+### 2. Available Endpoints
 
-Then run the development server (using the package manager of your choice):
+The **Workler (Hono)** acts as an orchestrator, routing requests to these internal services:
 
-```bash
-npm run dev
-```
+#### Main API Service (`apicontainer`)
+*   **`/api/*`**: Routed to a single, stable API container. Used for standard REST/GraphQL traffic.
 
-### WSL2 Users
-If you are running this on WSL2, you may see an error like `Cannot assign requested address; toString() = 172.17.0.1:0`. To fix this, you must manually bridge the Docker IP address by running:
+#### Process Service (`processcontainer`)
+*   **`/container/:id`**: Creates a 100% isolated container instance for a specific ID (e.g., User ID or Job ID).
+*   **`/singleton`**: Routes to a shared "Global" worker instance.
+*   **`/lb`**: Distributes traffic across a pool of up to 3 worker instances for load balancing.
+*   **`/error`**: Intentionally crashes a container to demonstrate Cloudflare's fault isolation and recovery.
 
-```bash
-sudo ip addr add 172.17.0.1/32 dev lo
-```
+### 3. Project Structure
 
-Open [http://localhost:8787](http://localhost:8787) with your browser to see the result.
+*   **`src/`**: TypeScript orchestrator (Hono + Container classes).
+*   **`container_src/cmd/`**: Go business logic, split into `api/` and `process/` binaries.
+*   **`docker/`**: (Optional) Folder for Docker-related configurations.
 
-You can start editing your Worker by modifying `src/index.ts` and you can start
-editing your Container by editing the content of `container_src`.
+### 4. Local Development
 
-## Deploying To Production
+1.  **Install dependencies**: `npm install`
+2.  **Generate types**: `npm run cf-typegen` (Mandatory after config changes)
+3.  **Run with Docker**: `npm run dev`
 
-| Command          | Action                                |
-| :--------------- | :------------------------------------ |
-| `npm run deploy` | Deploy your application to Cloudflare |
+---
 
 ## Learn More
 

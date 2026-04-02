@@ -11,6 +11,16 @@ export class apicontainer extends Container<Env> {
 	envVars = {
 		MESSAGE: "I am the API service!",
 	};
+
+	// THIS is what is called by "container.fetch(c.req.raw)"
+	override async fetch(request: Request): Promise<Response> {
+		console.log("1. Durable Object fetch triggered!");
+		// this call hands over the request to Go
+		const response = await super.fetch(request);
+
+		console.log("3. Durable Object received response from Go!");
+		return response;
+	}
 }
 
 // --- Nano-Service B: Process Worker ---

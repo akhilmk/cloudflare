@@ -12,12 +12,12 @@
 	"containers": [
 		{
 			"class_name": "apicontainer",
-			"image": "./docker/api.Dockerfile",
+			"image": "./api.Dockerfile",
 			"max_instances": 10
 		},
 		{
 			"class_name": "processcontainer",
-			"image": "./docker/process.Dockerfile",
+			"image": "./process.Dockerfile",
 			"max_instances": 10
 		}
 	],

@@ -17,11 +17,13 @@ func main() {
 
 	router := http.NewServeMux()
 	router.HandleFunc("/api/", func(w http.ResponseWriter, r *http.Request) {
+		message := os.Getenv("MESSAGE")
 		instanceId := os.Getenv("CLOUDFLARE_DURABLE_OBJECT_ID")
-		fmt.Fprintf(w, "[Main API] Highly-available service. Instance: %s", instanceId)
+		fmt.Fprintf(w, "[Main API] %s | Instance: %s", message, instanceId)
 	})
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "[Main API] Service Root. Instance: %s", os.Getenv("CLOUDFLARE_DURABLE_OBJECT_ID"))
+		message := os.Getenv("MESSAGE")
+		fmt.Fprintf(w, "[Main API Service] %s | Instance: %s", message, os.Getenv("CLOUDFLARE_DURABLE_OBJECT_ID"))
 	})
 
 	server := &http.Server{Addr: ":8080", Handler: router}
