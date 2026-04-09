@@ -15,6 +15,12 @@
 		"binding": "ASSETS",
 		"directory": ".svelte-kit/cloudflare"
 	},
+	"routes": [
+		{
+			"pattern": "ayora.yuvvolabs.com",
+			"custom_domain": true
+		}
+	],
 	"observability": {
 		"enabled": true
 	},
