@@ -1,5 +1,6 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
+    import { PUBLIC_TURNSTILE_SITE_KEY } from "$env/static/public";
 
     let submitting = $state(false);
     let submitted = $state(false);
@@ -41,11 +42,15 @@
                 body: JSON.stringify(data),
             });
 
-            if (!res.ok) throw new Error("Something went wrong");
+            const result = (await res.json()) as any;
+            if (!res.ok)
+                throw new Error(result.error || "Something went wrong");
 
             submitted = true;
-        } catch (err) {
-            error = "Failed to send. Please try again or email us directly.";
+        } catch (err: any) {
+            error =
+                err.message ||
+                "Failed to send. Please try again or email us directly.";
         } finally {
             submitting = false;
         }
@@ -79,6 +84,11 @@
         name="description"
         content="Get in touch with Ayora to register for courses, projects, ML sessions or career guidance."
     />
+    <script
+        src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+        async
+        defer
+    ></script>
 </svelte:head>
 
 <section class="page-header">
@@ -219,6 +229,13 @@
                             placeholder="Tell us your goals, subjects struggling with, or questions..."
                         ></textarea>
                     </div>
+
+                    <div
+                        class="cf-turnstile"
+                        data-sitekey={PUBLIC_TURNSTILE_SITE_KEY}
+                        data-theme="dark"
+                        style="margin-bottom: 1rem"
+                    ></div>
 
                     {#if error}
                         <div class="error-msg">{error}</div>

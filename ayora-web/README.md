@@ -78,8 +78,17 @@ npm run preview
 
 - **Adapter:** `adapter-cloudflare` targets Cloudflare Workers with static asset support. Assets are served from Cloudflare's CDN; server routes run as Worker functions.
 - **No Node.js APIs:** Worker runtime does not support `fs`, `path`, or other Node built-ins. Use Web APIs only.
-- **Environment variables:** Set secrets via `wrangler secret put` or add `[vars]` to `wrangler.jsonc`. Access them via `platform.env` in server routes.
-- **`$types` generation:** SvelteKit generates `+server.ts` types (`./$types`) only after `npm run build` or `npm run dev`. Use `RequestEvent` from `@sveltejs/kit` if types are missing in the editor.
+- **Environment variables:** 
+  - **Public:** Add to `vars` in `wrangler.jsonc` (e.g., `PUBLIC_TURNSTILE_SITE_KEY`).
+  - **Secrets:** Use Wrangler CLI to push sensitive keys:
+    ```sh
+    npx wrangler secret put TURNSTILE_SECRET
+    ```
+- **Type Generation:** Keep your IDE in sync with environment variables and Cloudflare bindings:
+  ```sh
+  npm run gen
+  ```
+- **`$types` generation:** SvelteKit generates `+server.ts` types (`./$types`) only after `npm run build` or `npm run dev`.
 
 ---
 

@@ -1,5 +1,6 @@
 import { json } from '@sveltejs/kit';
-import type { RequestHandler } from './$types';
+import type { RequestEvent } from '@sveltejs/kit';
+import { env } from '$env/dynamic/private';
 
 interface ContactBody {
     name?: string;
@@ -9,6 +10,7 @@ interface ContactBody {
     year?: string;
     interests?: string;
     message?: string;
+    'cf-turnstile-response'?: string;
 }
 
 /**
@@ -16,9 +18,38 @@ interface ContactBody {
  * Receives contact form submissions from the Ayora website.
  * Currently logs to console — replace with DB insert later.
  */
-export const POST: RequestHandler = async ({ request }) => {
+export const POST = async ({ request }: RequestEvent) => {
     try {
         const body = (await request.json()) as ContactBody;
+        const turnstileToken = body['cf-turnstile-response'];
+
+        // 1. Verify Turnstile Token
+        if (!turnstileToken) {
+            return json({ ok: false, error: 'Bot check failed (missing token)' }, { status: 400 });
+        }
+
+        const secretKey = env.TURNSTILE_SECRET;
+        if (!secretKey) {
+            console.error('[Ayora] Missing TURNSTILE_SECRET environment variable');
+            return json({ ok: false, error: 'Server configuration error' }, { status: 500 });
+        }
+
+        const ip = request.headers.get('cf-connecting-ip') || '';
+
+        const formData = new URLSearchParams();
+        formData.append('secret', secretKey);
+        formData.append('response', turnstileToken);
+        formData.append('remoteip', ip);
+
+        const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+            method: 'POST',
+            body: formData
+        });
+
+        const outcome = await verifyRes.json() as { success: boolean };
+        if (!outcome.success) {
+            return json({ ok: false, error: 'Bot check failed (invalid token)' }, { status: 403 });
+        }
 
         const { name, email, phone, college, year, interests, message } = body;
 
