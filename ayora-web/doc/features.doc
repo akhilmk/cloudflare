@@ -1,0 +1,21 @@
+Comprehensive platform designed to support school, college, and university students.
+
+# For Students and IT Graduates
+- Specialized focus on post-syllabus topics with concise explanations and one-on-one courses.
+- Academic project support: Offering AI-based academic projects with end-to-end hosting services.
+- Recorded and live sessions: Providing machine learning recorded content and live group sessions.
+- Professional transition classes: Intensive training for graduates to become industry-ready, covering Git, Linux, Frontend, Backend, and Networking basics.
+- Educational video library: Links to YouTube content to drive engagement and student enrollment.
+- Career guidance: Providing strategic advice for students entering the IT field.
+- Remote learning: All sessions are conducted via Zoom or other delivery platforms rather than on the website itself.
+- Focused purpose: The website serves as a gateway to enroll students in classes; it does not include internal testing, valuations, or a Udemy-style learning management system.
+
+# For Professionals
+- Backend and System Design fundamentals.
+- Containerization and Monitoring: Docker, Docker Compose, and observability stacks (ELK, Prometheus, Grafana).
+- Advanced Golang: In-depth concepts including Goroutines, concurrency, and performance optimization.
+- Live Infrastructure Hosting: Deploying projects to VPS with custom domain integration.
+- End-to-end Deployment: Covering domain registration, server management, reverse proxies, and application hosting.
+- Serverless Deployment: Hosting projects on serverless platforms like Cloudflare and Google Cloud Run.
+- AI and RAG-based Projects: Hands-on implementation of Retrieval-Augmented Generation.
+- Modern AI Tech Stack: Leveraging Ollama, ChromaDB, Vector Databases, and Semantic Search.
