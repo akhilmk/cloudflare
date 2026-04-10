@@ -55,29 +55,15 @@ export function buildContactPayload(body: Record<string, unknown>): ContactPaylo
     };
 }
 
-export interface SaveContactResult {
-    requestId: string;
-}
-
 /**
  * Persists a contact form submission.
- * Generates a unique requestId per submission — use it to correlate all log
- * lines for a single request (e.g. grep logs for the ID).
- *
- * TODO: Replace console.log with a real DB insert (D1, KV, Resend email, etc.)
- *       Store requestId alongside the record for full traceability.
  *
  * @param payload - A validated and normalised ContactPayload
- * @returns { requestId } — include in API response for client-side correlation
  */
-export async function saveContact(payload: ContactPayload): Promise<SaveContactResult> {
-    const requestId = crypto.randomUUID();
+export async function saveContact(payload: ContactPayload): Promise<void> {
     const eventId = 'CONTACT_FORM'; // Static ID for bulk filtering in logs
 
-    console.log(`[Ayora][${eventId}][${requestId}] New submission event`);
-    console.log(`[Ayora][${eventId}][${requestId}] Payload:`, JSON.stringify(payload, null, 2));
+    console.log(`[Ayora][${eventId}] Payload:`, JSON.stringify(payload, null, 2));
 
-    // TODO: await db.insert({ ...payload, requestId, eventId });
-
-    return { requestId };
+    // TODO: await db.insert({ ...payload, eventId });
 }

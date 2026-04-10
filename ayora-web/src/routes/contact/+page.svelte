@@ -51,8 +51,28 @@
             error =
                 err.message ||
                 "Failed to send. Please try again or email us directly.";
+
+            // Reset Turnstile on error so the user can try again immediately
+            if (typeof window !== "undefined" && (window as any).turnstile) {
+                (window as any).turnstile.reset();
+            }
         } finally {
             submitting = false;
+        }
+    }
+
+    function handleSendAnother() {
+        submitted = false;
+        selectedInterests = [];
+
+        // Re-initialize Turnstile when the form returns to the DOM
+        if (typeof window !== "undefined" && (window as any).turnstile) {
+            setTimeout(() => {
+                const el = document.querySelector(".cf-turnstile");
+                if (el) {
+                    (window as any).turnstile.render(el);
+                }
+            }, 50);
         }
     }
 
@@ -120,11 +140,8 @@
                         Thanks for reaching out. We'll contact you within 24
                         hours to discuss your learning goals.
                     </p>
-                    <button
-                        class="btn-outline"
-                        onclick={() => {
-                            submitted = false;
-                        }}>Send Another</button
+                    <button class="btn-outline" onclick={handleSendAnother}
+                        >Send Another</button
                     >
                 </div>
             {:else}

@@ -28,12 +28,11 @@ export const POST = async ({ request }: RequestEvent) => {
 
         // 3. Persist (console for now — swap in DB/email in saveContact() only)
         const payload = buildContactPayload(body);
-        const { requestId } = await saveContact(payload);
+        await saveContact(payload);
 
         return json({
             ok: true,
-            message: 'Received! We will be in touch soon.',
-            requestId
+            message: 'Received! We will be in touch soon.'
         }, { status: 200 });
     } catch (err) {
         console.error('[Ayora] Contact API error:', err);
