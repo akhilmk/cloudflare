@@ -1,79 +1,40 @@
 import { json } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
-import { env } from '$env/dynamic/private';
-
-interface ContactBody {
-    name?: string;
-    email?: string;
-    phone?: string;
-    college?: string;
-    year?: string;
-    interests?: string;
-    message?: string;
-    'cf-turnstile-response'?: string;
-}
+import { verifyTurnstile } from '$lib/server/turnstile';
+import { validateContactBody, buildContactPayload, saveContact } from '$lib/server/contact';
 
 /**
  * POST /api/contact
- * Receives contact form submissions from the Ayora website.
- * Currently logs to console — replace with DB insert later.
+ * Thin HTTP adapter — delegates all logic to $lib/server/*.
+ * Reusable REST endpoint: callable by the web UI, mobile apps, or any API client.
  */
 export const POST = async ({ request }: RequestEvent) => {
     try {
-        const body = (await request.json()) as ContactBody;
-        const turnstileToken = body['cf-turnstile-response'];
+        const body = (await request.json()) as Record<string, unknown>;
 
-        // 1. Verify Turnstile Token
-        if (!turnstileToken) {
-            return json({ ok: false, error: 'Bot check failed (missing token)' }, { status: 400 });
+        // 1. Bot protection
+        const ip = request.headers.get('cf-connecting-ip') ?? undefined;
+        const turnstile = await verifyTurnstile(body['cf-turnstile-response'] as string, ip);
+        if (!turnstile.ok) {
+            const status = turnstile.error?.includes('missing') ? 400 : 403;
+            return json({ ok: false, error: turnstile.error }, { status });
         }
 
-        const secretKey = env.TURNSTILE_SECRET;
-        if (!secretKey) {
-            console.error('[Ayora] Missing TURNSTILE_SECRET environment variable');
-            return json({ ok: false, error: 'Server configuration error' }, { status: 500 });
+        // 2. Field validation
+        const validation = validateContactBody(body);
+        if (!validation.ok) {
+            return json({ ok: false, error: validation.error }, { status: 400 });
         }
 
-        const ip = request.headers.get('cf-connecting-ip') || '';
+        // 3. Persist (console for now — swap in DB/email in saveContact() only)
+        const payload = buildContactPayload(body);
+        const { requestId } = await saveContact(payload);
 
-        const formData = new URLSearchParams();
-        formData.append('secret', secretKey);
-        formData.append('response', turnstileToken);
-        formData.append('remoteip', ip);
-
-        const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-            method: 'POST',
-            body: formData
-        });
-
-        const outcome = await verifyRes.json() as { success: boolean };
-        if (!outcome.success) {
-            return json({ ok: false, error: 'Bot check failed (invalid token)' }, { status: 403 });
-        }
-
-        const { name, email, phone, college, year, interests, message } = body;
-
-        // Basic validation
-        if (!name || !email) {
-            return json({ ok: false, error: 'Name and email are required' }, { status: 400 });
-        }
-
-        const payload = {
-            timestamp: new Date().toISOString(),
-            name,
-            email,
-            phone: phone || null,
-            college: college || null,
-            year: year || null,
-            interests: interests || '',
-            message: message || ''
-        };
-
-        // TODO: Replace with DB insert
-        console.log('[Ayora] New contact form submission:');
-        console.log(JSON.stringify(payload, null, 2));
-
-        return json({ ok: true, message: 'Received! We will be in touch soon.' }, { status: 200 });
+        return json({
+            ok: true,
+            message: 'Received! We will be in touch soon.',
+            requestId
+        }, { status: 200 });
     } catch (err) {
         console.error('[Ayora] Contact API error:', err);
         return json({ ok: false, error: 'Internal server error' }, { status: 500 });
