@@ -55,7 +55,10 @@
 	 * https://developers.cloudflare.com/workers/configuration/secrets/
 	 */
 	"vars": {
-		"PUBLIC_TURNSTILE_SITE_KEY": "0x4AAAAAAC2xrnVM2AQb-kIK"
+		"PUBLIC_TURNSTILE_SITE_KEY": "0x4AAAAAAC2xrnVM2AQb-kIK",
+		// Feature flag — not sensitive, so kept here (not a secret).
+		// Toggle via Cloudflare dashboard → Workers → Settings → Variables (no redeploy needed).
+		"TELEGRAM_ENABLED": "false"
 	}
 	/**
 	 * Service Bindings (communicate between multiple Workers)

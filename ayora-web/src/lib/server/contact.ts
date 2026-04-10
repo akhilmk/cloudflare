@@ -1,9 +1,13 @@
+import { sendTelegramMessage, escapeMdV2 } from '$lib/server/telegram';
+
 /**
  * Contact form — shared server-side logic.
  * Validation + persistence are separated here so:
  *   - +server.ts stays as a thin HTTP adapter
- *   - DB/email logic can be swapped in without touching the route
+ *   - Notification channels can be added/removed without touching the route
  */
+
+// ─── Types ───────────────────────────────────────────────────────────────────
 
 export interface ContactPayload {
     name: string;
@@ -22,6 +26,20 @@ export interface ValidationResult {
 }
 
 /**
+ * A NotificationChannel is any async function that receives a ContactPayload
+ * and sends it to some downstream system.
+ *
+ * Extend by adding new channels to the `channels` array in saveContact().
+ * Examples:
+ *   - telegramChannel    ← implemented below
+ *   - googleSheetsChannel ← add later, no changes needed elsewhere
+ *   - emailChannel        ← add later, no changes needed elsewhere
+ */
+type NotificationChannel = (payload: ContactPayload) => Promise<void>;
+
+// ─── Validation ──────────────────────────────────────────────────────────────
+
+/**
  * Validates required fields from a raw contact form body.
  */
 export function validateContactBody(body: Record<string, unknown>): ValidationResult {
@@ -37,6 +55,8 @@ export function validateContactBody(body: Record<string, unknown>): ValidationRe
 
     return { ok: true };
 }
+
+// ─── Payload Builder ─────────────────────────────────────────────────────────
 
 /**
  * Builds a normalised ContactPayload from raw form body.
@@ -55,15 +75,90 @@ export function buildContactPayload(body: Record<string, unknown>): ContactPaylo
     };
 }
 
+// ─── Notification Channels ───────────────────────────────────────────────────
+
 /**
- * Persists a contact form submission.
+ * Formats a ContactPayload as a safe MarkdownV2 Telegram message
+ * and sends it.
+ */
+const telegramChannel: NotificationChannel = async (payload) => {
+    const humanTime = new Date(payload.timestamp).toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        dateStyle: 'medium',
+        timeStyle: 'short'
+    });
+
+    // Safely escape every user-supplied value
+    const field = (value: string | null | undefined, fallback = 'N/A') =>
+        escapeMdV2(value?.trim() || fallback);
+
+    const message = [
+        `🆕 *New Contact Submission*`,
+        ``,
+        `👤 *Name:* ${field(payload.name)}`,
+        `📧 *Email:* ${field(payload.email)}`,
+        `📱 *Phone:* ${field(payload.phone)}`,
+        `🏫 *College:* ${field(payload.college)}`,
+        `🎓 *Year:* ${field(payload.year)}`,
+        ``,
+        `💡 *Interests:*`,
+        field(payload.interests, 'None selected'),
+        ``,
+        `💬 *Message:*`,
+        field(payload.message, 'No message provided'),
+        ``,
+        `⏰ *Time:* ${escapeMdV2(humanTime)} \\(IST\\)`
+    ].join('\n');
+
+    const sent = await sendTelegramMessage(message);
+
+    if (sent) {
+        console.log('[Ayora][Contact][Telegram] Notification sent successfully');
+    } else {
+        console.warn('[Ayora][Contact][Telegram] Notification failed or skipped');
+    }
+};
+
+/**
+ * FUTURE: Google Sheets channel — uncomment and implement when ready.
+ *
+ * const googleSheetsChannel: NotificationChannel = async (payload) => {
+ *     await appendToSheet(payload);
+ * };
+ */
+
+// ─── Persistence Entry Point ─────────────────────────────────────────────────
+
+/**
+ * Persists a contact form submission and fans-out to all notification channels.
+ *
+ * To add a new destination (Google Sheets, email, Slack, etc.):
+ *   1. Implement a new `NotificationChannel` function above
+ *   2. Add it to the `channels` array below — nothing else changes
  *
  * @param payload - A validated and normalised ContactPayload
  */
 export async function saveContact(payload: ContactPayload): Promise<void> {
-    const eventId = 'CONTACT_FORM'; // Static ID for bulk filtering in logs
+    const eventId = 'CONTACT_FORM';
 
+    console.log(`[Ayora][${eventId}] New submission received`);
+    // TODO: await db.insert({ ...payload, eventId });
     console.log(`[Ayora][${eventId}] Payload:`, JSON.stringify(payload, null, 2));
 
-    // TODO: await db.insert({ ...payload, eventId });
+    // ── Notification channels ────────────────────────────────────────────────
+    // Add new channels here — order matters for logging clarity only.
+    const channels: NotificationChannel[] = [
+        telegramChannel,
+        // googleSheetsChannel,  ← add when ready
+        // emailChannel,         ← add when ready
+    ];
+
+    // Run all channels concurrently; one failure won't block others.
+    const results = await Promise.allSettled(channels.map((ch) => ch(payload)));
+
+    results.forEach((result, i) => {
+        if (result.status === 'rejected') {
+            console.error(`[Ayora][${eventId}] Channel[${i}] threw an error:`, result.reason);
+        }
+    });
 }

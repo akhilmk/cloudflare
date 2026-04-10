@@ -8,7 +8,7 @@ import { validateContactBody, buildContactPayload, saveContact } from '$lib/serv
  * Thin HTTP adapter — delegates all logic to $lib/server/*.
  * Reusable REST endpoint: callable by the web UI, mobile apps, or any API client.
  */
-export const POST = async ({ request }: RequestEvent) => {
+export const POST = async ({ request, platform }: RequestEvent) => {
     try {
         const body = (await request.json()) as Record<string, unknown>;
 
@@ -26,9 +26,17 @@ export const POST = async ({ request }: RequestEvent) => {
             return json({ ok: false, error: validation.error }, { status: 400 });
         }
 
-        // 3. Persist (console for now — swap in DB/email in saveContact() only)
+        // 3. Persist & Notify (Background task)
         const payload = buildContactPayload(body);
-        await saveContact(payload);
+
+        // On Cloudflare, use waitUntil to return response immediately 
+        // while the background work (Telegram, etc.) finishes.
+        if (platform?.ctx?.waitUntil) {
+            platform.ctx.waitUntil(saveContact(payload));
+        } else {
+            // Fallback for local dev/testing
+            await saveContact(payload);
+        }
 
         return json({
             ok: true,
