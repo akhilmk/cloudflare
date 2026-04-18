@@ -1,4 +1,4 @@
-# Ayora Labs — Web
+# YuvvoLabs — Web
 
 A [SvelteKit](https://svelte.dev/docs/kit) project deployed to **Cloudflare Workers** using the [`@sveltejs/adapter-cloudflare`](https://svelte.dev/docs/kit/adapter-cloudflare).
 
@@ -95,5 +95,5 @@ npm run preview
 npx sv@0.12.4 create --template minimal --types ts \
   --add tailwindcss="plugins:none" \
   sveltekit-adapter="adapter:cloudflare+cfTarget:workers" \
-  --install npm ayora-web
+  --install npm yuvvolabs-web
 ```

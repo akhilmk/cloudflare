@@ -149,6 +149,7 @@ a {
   background: linear-gradient(135deg, rgba(108, 99, 255, 0.04) 0%, transparent 60%);
   opacity: 0;
   transition: opacity 0.3s ease;
+  pointer-events: none;
 }
 
 .card:hover {

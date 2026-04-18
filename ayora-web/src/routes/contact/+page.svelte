@@ -1,5 +1,7 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
+    import { page } from "$app/stores";
+    import { onMount } from "svelte";
     import { PUBLIC_TURNSTILE_SITE_KEY } from "$env/static/public";
 
     let submitting = $state(false);
@@ -7,16 +9,29 @@
     let error = $state("");
 
     const interests = [
+        "Software Development",
         "Syllabus Course (1-on-1)",
         "Academic Project Support",
-        "ML Recorded Sessions",
-        "ML Live Group Sessions",
+        "ML Live Sessions",
         "Career Bootcamp",
-        "Career Guidance Only",
-        "YouTube / Free Resources",
+        "Career Guidance",
     ];
 
     let selectedInterests = $state<string[]>([]);
+
+    onMount(() => {
+        const interest = $page.url.searchParams.get("interest");
+        if (interest) {
+            const matched = interests.find(
+                (i) =>
+                    i.toLowerCase().replace(/\s+/g, "-") ===
+                    interest.toLowerCase(),
+            );
+            if (matched) {
+                selectedInterests = [matched];
+            }
+        }
+    });
 
     function toggleInterest(interest: string) {
         if (selectedInterests.includes(interest)) {
@@ -99,10 +114,10 @@
 </script>
 
 <svelte:head>
-    <title>Contact — Ayora</title>
+    <title>Contact — YuvvoLabs</title>
     <meta
         name="description"
-        content="Get in touch with Ayora to register for courses, projects, ML sessions or career guidance."
+        content="Get in touch with YuvvoLabs to register for courses, projects, ML sessions or career guidance."
     />
     <script
         src="https://challenges.cloudflare.com/turnstile/v0/api.js"
@@ -173,40 +188,15 @@
                         </div>
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="phone">Phone / WhatsApp</label>
-                            <input
-                                id="phone"
-                                name="phone"
-                                type="tel"
-                                placeholder="+91 00000 00000"
-                            />
-                        </div>
-                        <div class="form-group">
-                            <label for="college">College / University</label>
-                            <input
-                                id="college"
-                                name="college"
-                                type="text"
-                                placeholder="Your institution"
-                            />
-                        </div>
-                    </div>
-
                     <div class="form-group">
-                        <label for="year">Year of Study</label>
-                        <select id="year" name="year">
-                            <option value="">Select year</option>
-                            <option value="1st Year">1st Year</option>
-                            <option value="2nd Year">2nd Year</option>
-                            <option value="3rd Year">3rd Year</option>
-                            <option value="4th Year">4th Year</option>
-                            <option value="Post Graduate">Post Graduate</option>
-                            <option value="Pass-out / Working"
-                                >Pass-out / Working</option
-                            >
-                        </select>
+                        <label for="phone">Phone / WhatsApp *</label>
+                        <input
+                            id="phone"
+                            name="phone"
+                            type="tel"
+                            placeholder="+91 00000 00000"
+                            required
+                        />
                     </div>
 
                     <!-- Interests -->
@@ -234,18 +224,6 @@
                             {/each}
                         </div>
                     </fieldset>
-
-                    <div class="form-group">
-                        <label for="message"
-                            >Anything else you'd like to share?</label
-                        >
-                        <textarea
-                            id="message"
-                            name="message"
-                            rows={4}
-                            placeholder="Tell us your goals, subjects struggling with, or questions..."
-                        ></textarea>
-                    </div>
 
                     <div
                         class="cf-turnstile"
@@ -307,11 +285,11 @@
                 <h3>Reach Us Directly</h3>
                 <div class="contact-links">
                     <a
-                        href="mailto:hello@ayora.dev"
+                        href="mailto:info@yuvvolabs.com"
                         class="contact-link"
                         id="contact-email-link"
                     >
-                        <span>📧</span> hello@ayora.dev
+                        <span>📧</span> info@yuvvolabs.com
                     </a>
                     <a
                         href="https://wa.me/919000000000"
@@ -408,9 +386,7 @@
         letter-spacing: 0.06em;
     }
 
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
+    .form-group input {
         background: var(--color-surface-2);
         border: 1px solid var(--color-border);
         color: var(--color-text);
@@ -422,18 +398,14 @@
             border-color 0.2s,
             box-shadow 0.2s;
         outline: none;
-        resize: vertical;
     }
 
-    .form-group input::placeholder,
-    .form-group textarea::placeholder {
+    .form-group input::placeholder {
         color: var(--color-muted);
         opacity: 0.6;
     }
 
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
+    .form-group input:focus {
         border-color: var(--color-accent);
         box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
     }

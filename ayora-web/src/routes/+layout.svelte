@@ -13,6 +13,7 @@
 		{ href: "/sessions", label: "Sessions" },
 		{ href: "/career", label: "Career" },
 		{ href: "/professionals", label: "Professionals" },
+		{ href: "/services", label: "Services" },
 		{ href: "/contact", label: "Contact" },
 	];
 
@@ -30,7 +31,7 @@
 	<nav class="nav-inner container">
 		<a href="/" class="brand">
 			<span class="brand-icon">⚡</span>
-			<span>Ayora<span class="brand-labs"> Labs</span></span>
+			<span>YuvvoLabs</span>
 		</a>
 
 		<!-- Desktop links -->
@@ -91,7 +92,7 @@
 			<div class="footer-brand">
 				<a href="/" class="brand">
 					<span class="brand-icon">⚡</span>
-					<span>Ayora<span class="brand-labs"> Labs</span></span>
+					<span>YuvvoLabs</span>
 				</a>
 				<p>
 					Bridging students to professional IT careers through quality
@@ -111,6 +112,7 @@
 				<ul>
 					<li><a href="/career">Career Guide</a></li>
 					<li><a href="/professionals">For Professionals</a></li>
+					<li><a href="/services">Services</a></li>
 					<li><a href="/contact">Contact Us</a></li>
 				</ul>
 			</div>
@@ -133,7 +135,7 @@
 			</div>
 		</div>
 		<div class="footer-bottom">
-			<p>© 2025 Ayora Labs. All rights reserved.</p>
+			<p>© 2025 YuvvoLabs. All rights reserved.</p>
 			<p class="footer-tagline">Empowering the next generation 🚀</p>
 		</div>
 	</div>
@@ -167,17 +169,6 @@
 		letter-spacing: -0.01em;
 		text-decoration: none;
 		color: #fff;
-	}
-
-	.brand-labs {
-		font-size: 0.75em;
-		font-weight: 500;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		color: var(--color-accent-2);
-		-webkit-text-fill-color: var(--color-accent-2);
-		opacity: 0.9;
-		vertical-align: middle;
 	}
 
 	.brand-icon {

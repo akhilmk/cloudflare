@@ -110,10 +110,10 @@
 </script>
 
 <svelte:head>
-    <title>Career Guidance — Ayora</title>
+    <title>Career Guidance — YuvvoLabs</title>
     <meta
         name="description"
-        content="Career bootcamp for freshers: Linux, Git, Frontend, Backend, Networking and interview prep at Ayora."
+        content="Career bootcamp for freshers: Linux, Git, Frontend, Backend, Networking and interview prep at YuvvoLabs."
     />
 </svelte:head>
 
@@ -134,8 +134,10 @@
             needs to land their first IT role — taught live over Zoom.
         </p>
         <div style="margin-top:1.5rem">
-            <a href="/contact" class="btn-primary" id="career-hero-cta"
-                >Enroll in Bootcamp →</a
+            <a
+                href="/contact?interest=career-bootcamp"
+                class="btn-primary"
+                id="career-hero-cta">Enroll in Bootcamp →</a
             >
         </div>
     </div>
@@ -185,9 +187,11 @@
             {#each milestones as m, i}
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
-                    {#if i < milestones.length - 1}
-                        <div class="timeline-line"></div>
-                    {/if}
+                    <div class="timeline-line-container">
+                        {#if i < milestones.length - 1}
+                            <div class="timeline-line"></div>
+                        {/if}
+                    </div>
                     <div class="timeline-content card">
                         <span class="tl-label">{m.label}</span>
                         <h4>{m.title}</h4>
@@ -204,8 +208,10 @@
                 No upfront commitment. Just reach out and we'll walk you through
                 the program that suits you best.
             </p>
-            <a href="/contact" class="btn-primary" id="career-bottom-cta"
-                >Contact Us →</a
+            <a
+                href="/contact?interest=career-bootcamp"
+                class="btn-primary"
+                id="career-bottom-cta">Contact Us →</a
             >
         </div>
     </div>
@@ -293,20 +299,27 @@
         background: var(--color-accent);
         border: 2px solid var(--color-bg);
         outline: 2px solid var(--color-accent);
-        align-self: center;
+        justify-self: center;
         flex-shrink: 0;
+        margin-top: 1.5rem;
+    }
+
+    .timeline-line-container {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
     }
 
     .timeline-line {
         width: 2px;
         height: calc(100% + 1.5rem);
         background: var(--color-border);
-        align-self: stretch;
     }
 
     .timeline-content {
         padding: 1.25rem;
-        margin-left: 0;
+        grid-column: 3;
     }
 
     .tl-label {

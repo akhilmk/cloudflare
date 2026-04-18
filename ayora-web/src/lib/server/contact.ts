@@ -113,9 +113,9 @@ const telegramChannel: NotificationChannel = async (payload) => {
     const sent = await sendTelegramMessage(message);
 
     if (sent) {
-        console.log('[Ayora][Contact][Telegram] Notification sent successfully');
+        console.log('[YuvvoLabs][Contact][Telegram] Notification sent successfully');
     } else {
-        console.warn('[Ayora][Contact][Telegram] Notification failed or skipped');
+        console.warn('[YuvvoLabs][Contact][Telegram] Notification failed or skipped');
     }
 };
 
@@ -141,9 +141,9 @@ const telegramChannel: NotificationChannel = async (payload) => {
 export async function saveContact(payload: ContactPayload): Promise<void> {
     const eventId = 'CONTACT_FORM';
 
-    console.log(`[Ayora][${eventId}] New submission received`);
+    console.log(`[YuvvoLabs][${eventId}] New submission received`);
     // TODO: await db.insert({ ...payload, eventId });
-    console.log(`[Ayora][${eventId}] Payload:`, JSON.stringify(payload, null, 2));
+    console.log(`[YuvvoLabs][${eventId}] Payload:`, JSON.stringify(payload, null, 2));
 
     // ── Notification channels ────────────────────────────────────────────────
     // Add new channels here — order matters for logging clarity only.
@@ -158,7 +158,7 @@ export async function saveContact(payload: ContactPayload): Promise<void> {
 
     results.forEach((result, i) => {
         if (result.status === 'rejected') {
-            console.error(`[Ayora][${eventId}] Channel[${i}] threw an error:`, result.reason);
+            console.error(`[YuvvoLabs][${eventId}] Channel[${i}] threw an error:`, result.reason);
         }
     });
 }

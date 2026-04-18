@@ -58,10 +58,10 @@
 </script>
 
 <svelte:head>
-    <title>Courses — Ayora</title>
+    <title>Courses — YuvvoLabs</title>
     <meta
         name="description"
-        content="Browse syllabus-aligned courses, one-on-one tutoring and professional skill programs at Ayora."
+        content="Browse syllabus-aligned courses, one-on-one tutoring and professional skill programs at YuvvoLabs."
     />
 </svelte:head>
 
@@ -107,7 +107,7 @@
                         {/each}
                     </ul>
                     <a
-                        href="/contact"
+                        href="/contact?interest=syllabus-course-(1-on-1)"
                         class="btn-outline"
                         style="margin-top:auto"
                         id="course-{cat.tag.toLowerCase()}-cta">Enquire Now →</a

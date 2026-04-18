@@ -89,10 +89,10 @@
 </script>
 
 <svelte:head>
-    <title>For Professionals — Ayora Labs</title>
+    <title>For Professionals — YuvvoLabs</title>
     <meta
         name="description"
-        content="Advanced courses for working engineers at Ayora Labs. Go deep on System Design, Golang, DevOps, serverless, and AI/RAG — all delivered live over Zoom."
+        content="Advanced courses for working engineers at YuvvoLabs. Go deep on System Design, Golang, DevOps, serverless, and AI/RAG — all delivered live over Zoom."
     />
 </svelte:head>
 
@@ -121,8 +121,10 @@
             and hands-on.
         </p>
         <div style="margin-top:2rem;display:flex;gap:1rem;flex-wrap:wrap">
-            <a href="/contact" class="btn-primary" id="pro-hero-cta"
-                >Enroll Now →</a
+            <a
+                href="/contact?interest=software-development"
+                class="btn-primary"
+                id="pro-hero-cta">Enroll Now →</a
             >
             <a href="#tracks" class="btn-outline" id="pro-explore-btn"
                 >View All Tracks</a
@@ -242,8 +244,10 @@
                     Join engineers who are mastering the production-grade skills
                     that actually matter at work.
                 </p>
-                <a href="/contact" class="btn-primary" id="pro-bottom-cta"
-                    >Register Interest →</a
+                <a
+                    href="/contact?interest=software-development"
+                    class="btn-primary"
+                    id="pro-bottom-cta">Register Interest →</a
                 >
             </div>
         </div>

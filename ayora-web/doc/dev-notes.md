@@ -1,6 +1,6 @@
 # Developer Documentation
 
-Internal notes for engineers working on Ayora Labs Web.  
+Internal notes for engineers working on YuvvoLabs Web.  
 For project overview and deployment, see the main [README](../README.md).
 
 ---
@@ -137,7 +137,7 @@ npx wrangler secret list
 You **never need to edit source code or redeploy** just to enable/disable Telegram.
 
 **Recommended — Cloudflare Dashboard:**
-1. Go to **Cloudflare Dashboard** → Workers & Pages → `ayora-web`
+1. Go to **Cloudflare Dashboard** → Workers & Pages → `yuvvolabs-web`
 2. Settings → **Variables and Secrets**
 3. Add or edit `TELEGRAM_ENABLED` → set to `true` or `false`
 4. Click **Save** — takes effect on the next request instantly
@@ -177,7 +177,7 @@ All channels run **concurrently** via `Promise.allSettled` — one failure never
 ### Monitoring & Debugging
 
 You can monitor notifications in real-time via the **Cloudflare Dashboard**:
-1. Go to **Workers & Pages** → `ayora-web`
+1. Go to **Workers & Pages** → `yuvvolabs-web`
 2. Click the **Logs** tab → **Begin log stream**
 
 #### Useful Log Filters
@@ -185,16 +185,16 @@ Paste these into the "Search logs" box to filter specific events:
 
 | Goal | Filter String |
 |------|---------------|
-| **All Ayora logs** | `[Ayora]` |
-| **Only Telegram logs** | `[Ayora][Telegram]` |
-| **Only Contact Form logic** | `[Ayora][CONTACT_FORM]` |
+| **All YuvvoLabs logs** | `[YuvvoLabs]` |
+| **Only Telegram logs** | `[YuvvoLabs][Telegram]` |
+| **Only Contact Form logic** | `[YuvvoLabs][CONTACT_FORM]` |
 | **Only Errors/Warnings** | `level:error` or `level:warn` |
 
 #### Debugging a "Silent" Failure
 If a user submits a form but no Telegram message arrives:
 1. Ensure `TELEGRAM_ENABLED` is actually `"true"` in the dashboard.
-2. Check logs for `[Ayora][Telegram] API error`. If you see `401 Unauthorized`, your bot token is wrong.
-3. Check for `[Ayora][Telegram] Notifications disabled`. This means your credentials (`BOT_TOKEN` or `CHAT_ID`) are missing or empty.
+2. Check logs for `[YuvvoLabs][Telegram] API error`. If you see `401 Unauthorized`, your bot token is wrong.
+3. Check for `[YuvvoLabs][Telegram] Notifications disabled`. This means your credentials (`BOT_TOKEN` or `CHAT_ID`) are missing or empty.
 
 ---
 

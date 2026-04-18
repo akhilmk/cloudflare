@@ -74,10 +74,10 @@
 </script>
 
 <svelte:head>
-    <title>Ayora Labs — Students &amp; Professionals</title>
+    <title>YuvvoLabs — Students & Professionals</title>
     <meta
         name="description"
-        content="Ayora Labs helps students break into IT and enables working engineers to level up with advanced courses in System Design, Golang, DevOps, and AI."
+        content="YuvvoLabs helps students break into IT and enables working engineers to level up with advanced courses in System Design, Golang, DevOps, and AI."
     />
 </svelte:head>
 
@@ -137,7 +137,7 @@
             </div>
             <div class="hero-badge-stack">
                 <div class="stack-icon">⚡</div>
-                <div class="stack-label">Ayora</div>
+                <div class="stack-label">Yuvvo</div>
                 <div class="stack-sub">Students → Engineers → Leaders</div>
             </div>
         </div>

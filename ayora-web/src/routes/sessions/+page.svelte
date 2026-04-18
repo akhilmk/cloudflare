@@ -58,10 +58,10 @@
 </script>
 
 <svelte:head>
-    <title>Sessions — Ayora</title>
+    <title>Sessions — YuvvoLabs</title>
     <meta
         name="description"
-        content="Join live and recorded ML sessions at Ayora. Interactive group learning for all skill levels."
+        content="Join live and recorded ML sessions at YuvvoLabs. Interactive group learning for all skill levels."
     />
 </svelte:head>
 
@@ -106,7 +106,7 @@
                         {/each}
                     </ul>
                     <a
-                        href="/contact"
+                        href="/contact?interest=ml-live-sessions"
                         class="btn-outline"
                         id="session-{st.tag.toLowerCase()}-cta"
                         >Register Interest →</a
@@ -140,7 +140,7 @@
                         <span class="spots-badge">{s.spots} left</span>
                     </span>
                     <a
-                        href="/contact"
+                        href="/contact?interest=ml-live-sessions"
                         class="btn-primary"
                         style="padding:0.45rem 1rem;font-size:0.8rem"
                         id="session-register-{i}">Register</a

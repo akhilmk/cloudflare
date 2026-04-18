@@ -35,7 +35,7 @@ export function isTelegramEnabled(): boolean {
  */
 export async function sendTelegramMessage(text: string, timeoutMs = 5000): Promise<boolean> {
     if (!isTelegramEnabled()) {
-        console.info('[Ayora][Telegram] Notifications disabled or not configured, skipping.');
+        console.info('[YuvvoLabs][Telegram] Notifications disabled or not configured, skipping.');
         return false;
     }
 
@@ -60,16 +60,16 @@ export async function sendTelegramMessage(text: string, timeoutMs = 5000): Promi
 
         if (!res.ok) {
             const err = await res.text();
-            console.error('[Ayora][Telegram] API error:', err);
+            console.error('[YuvvoLabs][Telegram] API error:', err);
             return false;
         }
 
         return true;
     } catch (e) {
         if (e instanceof Error && e.name === 'AbortError') {
-            console.error('[Ayora][Telegram] Request timed out after', timeoutMs, 'ms');
+            console.error('[YuvvoLabs][Telegram] Request timed out after', timeoutMs, 'ms');
         } else {
-            console.error('[Ayora][Telegram] Fetch error:', e);
+            console.error('[YuvvoLabs][Telegram] Fetch error:', e);
         }
         return false;
     } finally {

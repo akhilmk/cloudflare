@@ -75,10 +75,10 @@
 </script>
 
 <svelte:head>
-    <title>Academic Projects — Ayora</title>
+    <title>Academic Projects — YuvvoLabs</title>
     <meta
         name="description"
-        content="Get end-to-end academic project support with AI integration and free hosting at Ayora."
+        content="Get end-to-end academic project support with AI integration and free hosting at YuvvoLabs."
     />
 </svelte:head>
 
@@ -142,8 +142,10 @@
                     </p>
                 </div>
             </div>
-            <a href="/contact" class="btn-primary" id="projects-hosting-cta"
-                >Request Project Help →</a
+            <a
+                href="/contact?interest=academic-project-support"
+                class="btn-primary"
+                id="projects-hosting-cta">Request Project Help →</a
             >
         </div>
 

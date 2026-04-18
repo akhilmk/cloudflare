@@ -22,7 +22,7 @@ export async function verifyTurnstile(
 
     const secretKey = env.TURNSTILE_SECRET;
     if (!secretKey) {
-        console.error('[Ayora] Missing TURNSTILE_SECRET environment variable');
+        console.error('[YuvvoLabs] Missing TURNSTILE_SECRET environment variable');
         return { ok: false, error: 'Server configuration error' };
     }
 
