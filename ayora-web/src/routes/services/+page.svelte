@@ -2,7 +2,7 @@
 	<title>Services — YuvvoLabs</title>
 	<meta
 		name="description"
-		content="Professional website development packages for local businesses. Choose from Starter, Growth, or Pro plans tailored for jewellery shops, furniture stores, and more."
+		content="Professional website development packages for all businesses. Choose from Basic, Growth, or Pro plans tailored to help you scale online."
 	/>
 </svelte:head>
 
@@ -18,20 +18,15 @@
 				<span class="gradient-text"> Online</span>
 			</h1>
 			<p class="hero-sub">
-				Tailored website solutions for local businesses — jewellery
-				shops, furniture stores, and every business in between. Pick the
-				plan that fits where you are today.
+				Tailored website solutions for businesses of all sizes — from
+				local shops to growing enterprises. Pick the plan that fits
+				where you are today.
 			</p>
 			<div class="hero-cta">
 				<a
-					href="/contact?interest=software-development"
-					class="btn-primary"
-					id="hero-get-started-btn">Get Started →</a
-				>
-				<a
 					href="#packages"
-					class="btn-outline"
-					id="hero-view-packages-btn">View Packages</a
+					class="btn-primary"
+					id="hero-view-packages-btn">View Packages →</a
 				>
 			</div>
 		</div>
@@ -45,14 +40,19 @@
 		</p>
 
 		<div class="packages-grid">
-			<!-- ── STARTER ── -->
-			<div class="pkg-card" id="pkg-starter">
+			<!-- ── BASIC ── -->
+			<div class="pkg-card" id="pkg-basic">
 				<div class="pkg-header">
 					<span class="pkg-icon">📦</span>
 					<div>
-						<div class="pkg-label">Starter</div>
+						<div class="pkg-label">Basic</div>
 						<div class="pkg-tagline">"Get Online"</div>
 					</div>
+				</div>
+
+				<div class="pkg-price">
+					<span class="amount">₹10K - ₹20K</span>
+					<span class="period">Per Year</span>
 				</div>
 
 				<p class="pkg-desc">
@@ -144,8 +144,8 @@
 
 				<a
 					href="/contact?interest=software-development"
-					class="btn-outline pkg-cta"
-					id="starter-contact-btn">Enquire Now →</a
+					class="btn-primary pkg-cta"
+					id="basic-contact-btn">Enquire Now →</a
 				>
 			</div>
 
@@ -160,8 +160,13 @@
 					</div>
 				</div>
 
+				<div class="pkg-price">
+					<span class="amount">₹20K - ₹50K</span>
+					<span class="period">Per Year</span>
+				</div>
+
 				<p class="pkg-desc">
-					Everything in Starter, plus lead capture, a rich product
+					Everything in Basic, plus lead capture, a rich product
 					catalogue, and professional email to fuel consistent growth.
 				</p>
 
@@ -325,6 +330,11 @@
 							"Manage Your Business Online"
 						</div>
 					</div>
+				</div>
+
+				<div class="pkg-price">
+					<span class="amount">₹50K+</span>
+					<span class="period">Per Year (Customised)</span>
 				</div>
 
 				<p class="pkg-desc">
@@ -545,7 +555,7 @@
 
 				<a
 					href="/contact?interest=software-development"
-					class="btn-primary pro-cta pkg-cta"
+					class="btn-primary pkg-cta"
 					id="pro-contact-btn">Enquire Now →</a
 				>
 			</div>
@@ -779,6 +789,26 @@
 		border-bottom: 1px solid var(--color-border);
 	}
 
+	.pkg-price {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+	}
+	.pkg-price .amount {
+		font-family: "Outfit", sans-serif;
+		font-size: 1.65rem;
+		font-weight: 800;
+		color: #fff;
+		letter-spacing: -0.01em;
+	}
+	.pkg-price .period {
+		font-size: 0.72rem;
+		color: var(--color-accent-2);
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+	}
+
 	/* ─── Feature group ─── */
 	.feature-group {
 		display: flex;
@@ -838,22 +868,10 @@
 		line-height: 1.4;
 	}
 
-	/* ─── Package CTA ─── */
 	.pkg-cta {
 		margin-top: auto;
 		width: 100%;
 		justify-content: center;
-	}
-	.pro-cta {
-		background: linear-gradient(
-			135deg,
-			var(--color-accent-2) 0%,
-			#3dd9b3 100%
-		);
-		box-shadow: 0 0 20px rgba(0, 201, 167, 0.35);
-	}
-	.pro-cta:hover {
-		box-shadow: 0 0 40px rgba(0, 201, 167, 0.55);
 	}
 
 	/* ─── Add-ons ─── */

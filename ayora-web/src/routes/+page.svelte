@@ -1,18 +1,11 @@
 <script lang="ts">
     const offerings = [
         {
-            icon: "📚",
-            title: "Syllabus Courses",
-            desc: "Structured coverage of college syllabi with concise explanations and one-on-one tutoring available.",
+            icon: "🎓",
+            title: "Academics",
+            desc: "Syllabus coverage and end-to-end academic project support with AI integration.",
             color: "#6c63ff",
-            link: "/courses",
-        },
-        {
-            icon: "🤖",
-            title: "AI Academic Projects",
-            desc: "End-to-end AI-powered project support with live guidance and free hosting for your deliverables.",
-            color: "#00c9a7",
-            link: "/projects",
+            link: "/academics",
         },
         {
             icon: "🧠",
@@ -23,10 +16,10 @@
         },
         {
             icon: "💼",
-            title: "Career Bootcamp",
-            desc: "Git, Linux, Frontend, Backend, Networking — everything a fresh grad needs to land their first IT role.",
+            title: "Mentorship",
+            desc: "Focused programs for graduates and professionals — from bridge modules to senior engineering tracks.",
             color: "#ff6b6b",
-            link: "/career",
+            link: "/mentorship",
         },
         {
             icon: "▶️",
@@ -34,13 +27,6 @@
             desc: "Curated playlists and recorded lectures linked from our YouTube channel to complement your learning.",
             color: "#54a0ff",
             link: "#",
-        },
-        {
-            icon: "🎯",
-            title: "Career Guidance",
-            desc: "Personalised roadmaps for students entering the IT field — mentored by industry professionals.",
-            color: "#a29bfe",
-            link: "/career",
         },
     ];
 
@@ -108,8 +94,8 @@
                 delivered over Zoom.
             </p>
             <div class="hero-actions">
-                <a href="/courses" class="btn-primary" id="hero-explore-btn"
-                    >Explore Courses →</a
+                <a href="/academics" class="btn-primary" id="hero-explore-btn"
+                    >Explore Academics →</a
                 >
                 <a href="/contact" class="btn-outline" id="hero-contact-btn"
                     >Get in Touch</a
@@ -223,8 +209,8 @@
         </div>
 
         <div style="text-align:center">
-            <a href="/professionals" class="btn-primary" id="home-pro-cta"
-                >Explore Professional Tracks →</a
+            <a href="/mentorship" class="btn-primary" id="home-pro-cta"
+                >Explore Mentorship Tracks →</a
             >
         </div>
     </div>
@@ -295,11 +281,15 @@
                     campus to career.
                 </p>
                 <div class="hero-actions">
-                    <a href="/contact" class="btn-primary" id="cta-contact-btn"
-                        >Get Started Free →</a
+                    <a
+                        href="/mentorship"
+                        class="btn-primary"
+                        id="cta-contact-btn">Get Started Free →</a
                     >
-                    <a href="/courses" class="btn-outline" id="cta-courses-btn"
-                        >Browse Courses</a
+                    <a
+                        href="/academics"
+                        class="btn-outline"
+                        id="cta-courses-btn">Browse Academics</a
                     >
                 </div>
             </div>

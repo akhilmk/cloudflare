@@ -10,11 +10,10 @@
 
     const interests = [
         "Software Development",
-        "Syllabus Course (1-on-1)",
-        "Academic Project Support",
+        "Academics (Syllabus/Projects)",
+        "Mentorship (Graduate Track)",
+        "Mentorship (Advanced Engineering)",
         "ML Live Sessions",
-        "Career Bootcamp",
-        "Career Guidance",
     ];
 
     let selectedInterests = $state<string[]>([]);
@@ -292,7 +291,7 @@
                         <span>📧</span> info@yuvvolabs.com
                     </a>
                     <a
-                        href="https://wa.me/919000000000"
+                        href="https://wa.me/919633477455"
                         target="_blank"
                         rel="noopener"
                         class="contact-link"

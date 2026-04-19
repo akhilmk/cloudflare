@@ -8,11 +8,9 @@
 
 	const navLinks = [
 		{ href: "/", label: "Home" },
-		{ href: "/courses", label: "Courses" },
-		{ href: "/projects", label: "Projects" },
+		{ href: "/mentorship", label: "Mentorship" },
+		{ href: "/academics", label: "Academics" },
 		{ href: "/sessions", label: "Sessions" },
-		{ href: "/career", label: "Career" },
-		{ href: "/professionals", label: "Professionals" },
 		{ href: "/services", label: "Services" },
 		{ href: "/contact", label: "Contact" },
 	];
@@ -100,18 +98,16 @@
 				</p>
 			</div>
 			<div class="footer-links-group">
-				<h4>Platform</h4>
+				<h4>Learning</h4>
 				<ul>
-					<li><a href="/courses">Courses</a></li>
-					<li><a href="/projects">Projects</a></li>
+					<li><a href="/mentorship">Mentorship</a></li>
+					<li><a href="/academics">Academics</a></li>
 					<li><a href="/sessions">Sessions</a></li>
 				</ul>
 			</div>
 			<div class="footer-links-group">
-				<h4>Explore</h4>
+				<h4>Company</h4>
 				<ul>
-					<li><a href="/career">Career Guide</a></li>
-					<li><a href="/professionals">For Professionals</a></li>
 					<li><a href="/services">Services</a></li>
 					<li><a href="/contact">Contact Us</a></li>
 				</ul>
